@@ -27,7 +27,7 @@ class ChronosScreen(private val type: Type) : Screen {
     @Composable
     override fun Content() {
         val chronosScreenModel = getScreenModel<ChronosScreenModel>()
-        chronosScreenModel.setChronos(type.m * 60L)
+        chronosScreenModel.setChronos(type.durationInMinutes * 60L)
         ChronosScreenContent(chronosScreenModel = chronosScreenModel)
     }
 }
