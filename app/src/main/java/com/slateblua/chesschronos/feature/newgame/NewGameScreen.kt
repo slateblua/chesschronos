@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -37,7 +38,7 @@ class NewGameScreen : Screen {
 fun NewGameScreenContent(
     screenModel: NewGameScreenModel
 ) {
-    val gameType by screenModel.gameType.collectAsState()
+    val gameType by screenModel.gameType.collectAsStateWithLifecycle()
     val nav = LocalNavigator.currentOrThrow
 
     Scaffold(
