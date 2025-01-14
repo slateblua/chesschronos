@@ -1,24 +1,18 @@
 package com.slateblua.chesschronos.feature.newgame
 
-import android.graphics.drawable.ShapeDrawable
-import androidx.compose.foundation.background
-import androidx.compose.foundation.indication
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +37,7 @@ class NewGameScreen : Screen {
 fun NewGameScreenContent(
     screenModel: NewGameScreenModel
 ) {
-    val gameType = screenModel.gameType.collectAsState().value
+    val gameType by screenModel.gameType.collectAsState()
     val nav = LocalNavigator.currentOrThrow
 
     Scaffold(
@@ -61,17 +55,21 @@ fun NewGameScreenContent(
                         onClick = { screenModel.toggleType(type) },
                         modifier = Modifier
                             .padding(horizontal = 10.dp, vertical = 5.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(containerColor = if (gameType == type) Color(
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = if (gameType == type) Color(
                                 0xFFFFD8B7
-                            ) else Color.Transparent)
+                            ) else Color.Transparent
+                        )
                     ) {
                         Text(text = type.name)
                     }
                 }
             }
-            OutlinedButton(onClick = { nav.push(
-                ChronosScreen(gameType)
-            ) }) {
+            OutlinedButton(onClick = {
+                nav.push(
+                    ChronosScreen(gameType)
+                )
+            }) {
                 Text(text = "START")
             }
         }
