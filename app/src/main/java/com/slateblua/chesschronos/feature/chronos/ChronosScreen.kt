@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +22,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.slateblua.chesschronos.data.Type
 
 class ChronosScreen(private val type: Type) : Screen {
@@ -33,10 +36,22 @@ class ChronosScreen(private val type: Type) : Screen {
 }
 
 @Composable
-fun ChronosScreenContent(chronosScreenModel: ChronosScreenModel) {
+internal fun ChronosScreenContent(chronosScreenModel: ChronosScreenModel) {
 
     val playerOneState by chronosScreenModel.playerOneState.collectAsStateWithLifecycle()
     val playerTwoState by chronosScreenModel.playerTwoState.collectAsStateWithLifecycle()
+
+    val nav = LocalNavigator.currentOrThrow
+
+    LaunchedEffect(Unit) {
+        chronosScreenModel.sideEffect.collect { effect ->
+            when (effect) {
+                ChronosEffect.ChronosEnded -> {
+                    nav.popUntilRoot()
+                }
+            }
+        }
+    }
 
     ChronosScreen(
         playerOneState = playerOneState,
